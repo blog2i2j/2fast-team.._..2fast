@@ -188,12 +188,12 @@ namespace Project2FA.ViewModels
                 // if the current password is invalid, try to load the datafile with the new password
                 if (InvalidPassword)
                 {
-                    DatafileModel deserializeCollection = SerializationCryptoService.DeserializeDecrypt<DatafileModel>(Encoding.UTF8.GetBytes(NewPassword), iv, datafileStr, datafile.Version);
+                    DatafileModel deserializeCollection = SerializationCryptoService.DeserializeDecrypt<DatafileModel>(CreatePasswordKey(datafile,NewPassword), iv, datafileStr, datafile.Version);
                 }
                 else
                 {
                     // check the current password, if the file can be decrypted
-                    DatafileModel deserializeCollection = SerializationCryptoService.DeserializeDecrypt<DatafileModel>(Encoding.UTF8.GetBytes(CurrentPassword), iv, datafileStr, datafile.Version);
+                    DatafileModel deserializeCollection = SerializationCryptoService.DeserializeDecrypt<DatafileModel>(CreatePasswordKey(datafile, CurrentPassword), iv, datafileStr, datafile.Version);
                 }
 
                 return true;
@@ -212,6 +212,19 @@ namespace Project2FA.ViewModels
                     CurrentPassword = string.Empty;
                 }
                 return false;
+            }
+        }
+
+        private byte[] CreatePasswordKey(DatafileModel datafile, string password)
+        {
+            switch (datafile.Version)
+            {
+                case 0:
+                case 1:
+                default:
+                    return CryptoService.CreateByteArrayKeyV1(Encoding.UTF8.GetBytes(password));
+                case 2:
+                    return CryptoService.CreateByteArrayKeyV2(Encoding.UTF8.GetBytes(password));
             }
         }
 

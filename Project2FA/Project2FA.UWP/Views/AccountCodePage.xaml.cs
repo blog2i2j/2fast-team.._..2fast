@@ -51,8 +51,6 @@ namespace Project2FA.UWP.Views
 
         }
 
-
-
         /// <summary>
         /// Copy the 2fa code to clipboard and create a user dialog
         /// </summary>
