@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SVGImageConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TOTPVisibilityTooltipConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\VisibleWhenFalseConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ListViewExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ScrollToElementExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TextBoxRegex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TextBoxRegex.Data.cs" />

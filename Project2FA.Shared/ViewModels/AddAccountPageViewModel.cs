@@ -25,7 +25,7 @@ namespace Project2FA.ViewModels
 #endif
     public partial class AddAccountPageViewModel : AddAccountViewModelBase, IInitializeAsync
     {
-#if __ANDROID__ || __IOS__
+#if __ANDROID__ || __IOS__ || __DESKTOP__
         public ICommand CancelButtonCommand { get; }
 #endif
         public AddAccountPageViewModel(

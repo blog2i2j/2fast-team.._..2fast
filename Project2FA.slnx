@@ -77,12 +77,6 @@
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
   </Project>
-  <Project Path="Project2FA.Repository/Project2FA.Repository.csproj">
-    <BuildType Solution="Ad-Hoc|*" Project="Debug" />
-    <BuildType Solution="AppStore|*" Project="Debug" />
-    <Platform Solution="*|ARM64" Project="ARM64" />
-    <Platform Solution="*|x64" Project="x64" />
-  </Project>
   <Project Path="WebDAVClientPortable/WebDAVClientPortable.csproj">
     <BuildType Solution="Ad-Hoc|*" Project="Debug" />
     <BuildType Solution="AppStore|*" Project="Debug" />

@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using UNOversal.Navigation;
 using UNOversal.Services.Serialization;
-
+using System.Linq;
+using System.Collections.ObjectModel;
 
 #if !WINDOWS_UWP
 using Microsoft.UI.Xaml.Data;
@@ -68,6 +69,15 @@ namespace Project2FA.ViewModels
                 Model = model;
                 TempModel = (TwoFACodeModel)Model.Clone();
                 AccountIconName = TempModel.AccountIconName;
+
+                Model.SelectedCategories ??= new ObservableCollection<CategoryModel>();
+                // match the guid and add the items from GlobalTempCategories collection to the SelectedItems source.
+                var selectedItems = GlobalTempCategories.Where(x => Model.SelectedCategories.Where(selected => selected.Guid == x.Guid).Any());
+                for (int i = 0; i < selectedItems.Count(); i++)
+                {
+                    SelectedCategoryItems.Add(selectedItems.ElementAt(i));
+                    selectedItems.ElementAt(i).IsSelected = true;
+                }
             }
         }
     }

@@ -9,13 +9,13 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-				<!-- Load Cupertino resources -->
-				<CupertinoColors xmlns="using:Uno.Cupertino"  />
-				<CupertinoFonts xmlns="using:Uno.Cupertino"  />
-				<CupertinoResources xmlns="using:Uno.Cupertino" />
-                <!-- Load Uno.Toolkit.UI resources -->
+                <!-- Load Cupertino resources -->
+                <CupertinoColors xmlns="using:Uno.Cupertino"  />
+                <CupertinoFonts xmlns="using:Uno.Cupertino"  />
+                <CupertinoResources xmlns="using:Uno.Cupertino" />
+
+                <!-- Load Cupertino Toolkit resources -->
                 <ToolkitResources xmlns="using:Uno.Toolkit.UI" />
-                <!--<MaterialToolkitResources xmlns="using:Uno.Toolkit.UI.Material" />-->
                 <CupertinoToolkitResources xmlns="using:Uno.Toolkit.UI.Cupertino" />
 
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />

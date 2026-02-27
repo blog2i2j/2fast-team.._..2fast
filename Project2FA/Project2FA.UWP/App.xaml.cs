@@ -1,9 +1,4 @@
-﻿#if !NET9_0_OR_GREATER
-using Microsoft.EntityFrameworkCore;
-using Project2FA.Repository.Database;
-#endif
-
-#if NET9_0_OR_GREATER
+﻿#if NET9_0_OR_GREATER
 using WinRT;
 #endif
 
@@ -57,12 +52,6 @@ namespace Project2FA.UWP
         /// </summary>
         public static ShellPage? ShellPageInstance { get; private set; }
 
-#if !NET9_0_OR_GREATER
-        /// <summary>
-        /// Pipeline for interacting with database.
-        /// </summary>
-        public static IProject2FARepository Repository { get; private set; }
-#endif
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -107,9 +96,6 @@ namespace Project2FA.UWP
             container.RegisterSingleton<ISettingsHelper, SettingsHelper>();
             container.RegisterSingleton<IWebApiService, WebApiService>();
             container.RegisterSingleton<IGestureService, GestureService>();
-#if !NET9_0_OR_GREATER
-            container.RegisterSingleton<IProject2FARepository, DBProject2FARepository>();
-#endif
             container.RegisterSingleton<UNOversal.Services.Serialization.ISerializationService, SerializationService>();
             container.RegisterSingleton<ISerializationCryptoService, SerializationCryptoService>();
             container.RegisterSingleton<ISettingsAdapter, LocalSettingsAdapter>();
@@ -166,29 +152,6 @@ namespace Project2FA.UWP
                 }
                 Window.Current.Activated -= Current_Activated;
                 Window.Current.Activated += Current_Activated;
-#if !NET9_0_OR_GREATER
-                // set DB
-                if (Repository is null && string.IsNullOrWhiteSpace(SettingsService.Instance.DataFileName))
-                {
-                    var fileService = Current.Container.Resolve<IFileService>();
-                    if (await fileService.FileExistsAsync(Constants.ContainerName + ".db"))
-                    {
-                        string dbName = string.Format(@"\{0}.db", Constants.ContainerName);
-                        string databasePath = ApplicationData.Current.LocalFolder.Path + dbName;
-                        var dbOptions = new DbContextOptionsBuilder<Project2FAContext>().UseSqlite("Data Source=" + databasePath);
-                        Repository = new DBProject2FARepository(dbOptions);
-
-                        if(await MigrateDB())
-                        {
-                            await fileService.DeleteFileAsync(Constants.ContainerName + ".db");
-                        }
-                        else
-                        {
-                            // TODO: handle error
-                        }
-                    }
-                }
-#endif
 
                 // handle startup
                 if (args?.Arguments is ILaunchActivatedEventArgs e)
@@ -328,27 +291,6 @@ namespace Project2FA.UWP
 
             Window.Current.Activate();
         }
-
-#if !NET9_0_OR_GREATER
-        private async Task<bool> MigrateDB()
-        {
-            try
-            {
-                var pwDB = await Repository.Password.GetAsync();
-                SettingsService.Instance.DataFilePasswordHash = pwDB.Hash;
-                var datafileDB = await Repository.Datafile.GetAsync();
-                SettingsService.Instance.DataFileName = datafileDB.Name;
-                SettingsService.Instance.DataFilePath = datafileDB.Path;
-                SettingsService.Instance.DataFileWebDAVEnabled = datafileDB.IsWebDAV;
-                return true;
-            }
-            catch (Exception exc)
-            {
-                await this.Container.Resolve<ILoggingService>().LogException(exc, LoggingPreferEnum.Simple);
-                return false;
-            }
-        }
-#endif
 
 #region AutoLogout
         /// <summary>

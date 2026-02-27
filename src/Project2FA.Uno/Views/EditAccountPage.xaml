@@ -11,6 +11,7 @@
     xmlns:toolkit="using:Uno.UI.Toolkit"
     xmlns:utu="using:Uno.Toolkit.UI"
     xmlns:animations="using:CommunityToolkit.WinUI.Animations"
+    xmlns:extensions="using:Project2FA.Extensions"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:models="using:Project2FA.Repository.Models"
     xmlns:strings="using:Project2FA.Strings"
@@ -226,23 +227,24 @@
                         </Button>
                         <ctwc:SettingsExpander.ItemsHeader>
                             <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                                <labs:TokenView 
-                            x:Name="TV_Categories"  
-                            Margin="0,15,0,8"
-                            Visibility="{x:Bind ViewModel.CategoriesExists,Mode=OneWay}"
-                            ItemsSource="{x:Bind ViewModel.GlobalTempCategories,Mode=OneWay}"
-                            IsItemClickEnabled="True"
-                            SelectionMode="Multiple" 
-                            ItemClick="TokenView_ItemClick">
+                                <labs:TokenView
+                                x:Name="TV_Categories"
+                                Margin="0,15,0,8"
+                                Visibility="{x:Bind ViewModel.CategoriesExists,Mode=OneWay}"
+                                ItemsSource="{x:Bind ViewModel.GlobalTempCategories,Mode=OneWay}"
+                                extensions:ListViewExtensions.BindableSelectedItems="{x:Bind ViewModel.SelectedCategoryItems,Mode=OneWay}"
+                                IsItemClickEnabled="True"
+                                SelectionMode="Multiple" 
+                                ItemClick="TokenView_ItemClick">
                                     <labs:TokenView.ItemTemplate>
                                         <DataTemplate x:DataType="models:CategoryModel">
                                             <StackPanel Orientation="Horizontal">
                                                 <FontIcon 
-                                            FontFamily="{StaticResource SegoeFluentIconsFilled}"
-                                            Glyph="{x:Bind UnicodeIndex, Mode=OneWay, Converter={StaticResource FontIconUnicodeIndexToGlyphConverter}}"
-                                            Margin="0,0,10,0"/>
+                                                FontFamily="{StaticResource SegoeFluentIconsFilled}"
+                                                Glyph="{x:Bind UnicodeIndex, Mode=OneWay, Converter={StaticResource FontIconUnicodeIndexToGlyphConverter}}"
+                                                Margin="0,0,10,0"/>
                                                 <TextBlock 
-                                            Text="{x:Bind Name,Mode=OneWay}"/>
+                                                Text="{x:Bind Name,Mode=OneWay}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </labs:TokenView.ItemTemplate>

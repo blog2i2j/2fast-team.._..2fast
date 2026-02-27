@@ -54,7 +54,7 @@
 	<ItemGroup>
 		<PackageReference Include="BouncyCastle.Cryptography" Version="2.6.2" />
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.TokenView" Version="0.1.250828-build.2223" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
 		<PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.251219" />
 		<PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
 		<PackageReference Include="CommunityToolkit.WinUI.Collections" Version="8.2.251219" />
@@ -97,12 +97,18 @@
 		<TrimmerRootDescriptor Include="Platforms/iOS/LinkerConfig.xml" />
 	</ItemGroup>
 
+	<!-- Use CoreCLR on Android -->
+	<!--<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+		<UseMonoRuntime>false</UseMonoRuntime>
+	</PropertyGroup>-->
+
+
 	<PropertyGroup Condition="'$(Configuration)'=='Release' and '$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))' == 'android'">
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidStripILAfterAOT>false</AndroidStripILAfterAOT>
 		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-		<EnableLLVM>True</EnableLLVM>
-		<RunAOTCompilation>False</RunAOTCompilation>
+		<!--<EnableLLVM>True</EnableLLVM>-->
+		<RunAOTCompilation>true</RunAOTCompilation>
 	</PropertyGroup>
 
 	<ItemGroup>

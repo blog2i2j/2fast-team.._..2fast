@@ -11,9 +11,6 @@ using UNOversal.Services.Logging;
 using UNOversal.Ioc;
 using UNOversal.Services.Serialization;
 
-
-
-
 #if WINDOWS_UWP
 using Project2FA.UWP;
 using Windows.UI.Xaml.Controls;
@@ -35,6 +32,8 @@ namespace Project2FA.ViewModels
 
         public ObservableCollection<FontIdentifikationModel> FontIdentifikationCollection { get; } = new ObservableCollection<FontIdentifikationModel>();
         public ObservableCollection<CategoryModel> GlobalTempCategories { get; } = new ObservableCollection<CategoryModel>();
+
+        public ObservableCollection<CategoryModel> SelectedCategoryItems { get; } = new ObservableCollection<CategoryModel>();
         public ICommand CancelButtonCommand { get; internal set; }
         public ICommand PrimaryButtonCommand { get; internal set; }
         public ICommand DeleteAccountIconCommand { get; internal set; }
@@ -101,6 +100,7 @@ namespace Project2FA.ViewModels
                         {
                             GlobalTempCategories.Add((CategoryModel)DataService.Instance.GlobalCategories[i].Clone());
                         }
+
                     }
                 }
             }

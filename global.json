@@ -1,11 +1,10 @@
 {
   "sdk": {
-
     "allowPrerelease": false,
     "rollForward": "latestPatch"
   },
   "msbuild-sdks": {
     "MSBuild.Sdk.Extras": "3.0.44",
-    "Uno.Sdk": " 6.4.58"
+    "Uno.Sdk": "6.5.31"
   }
 }

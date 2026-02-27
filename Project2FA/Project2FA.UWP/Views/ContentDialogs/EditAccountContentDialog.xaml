@@ -322,7 +322,7 @@
                     <ctwc:SettingsExpander.ItemsHeader>
                         <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                             <labs:TokenView 
-                                x:Name="TV_Categories"  
+                                x:Name="TV_Categories"
                                 Margin="0,15,0,8"
                                 Visibility="{x:Bind ViewModel.CategoriesExists,Mode=OneWay}"
                                 ItemsSource="{x:Bind ViewModel.GlobalTempCategories,Mode=OneWay}"

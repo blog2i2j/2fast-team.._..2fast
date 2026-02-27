@@ -3,6 +3,7 @@ using Project2FA.Repository.Models;
 using Project2FA.Services;
 using Project2FA.UWP.Controls;
 using Project2FA.ViewModels;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UNOversal;
@@ -14,6 +15,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 #if NET9_0_OR_GREATER
 using WinRT;
@@ -34,6 +36,8 @@ namespace Project2FA.UWP.Views
 
         private void AccountCodePage_Loaded(object sender, RoutedEventArgs e)
         {
+            App.ShellPageInstance.ShellViewInternal.KeyUp -= OnKeyUp;
+            App.ShellPageInstance.ShellViewInternal.KeyUp += OnKeyUp;
             App.ShellPageInstance.ShellViewInternal.Header = ViewModel;
             if (SettingsService.Instance.IsProVersion)
             {
@@ -46,6 +50,8 @@ namespace Project2FA.UWP.Views
 
 
         }
+
+
 
         /// <summary>
         /// Copy the 2fa code to clipboard and create a user dialog
@@ -145,6 +151,10 @@ namespace Project2FA.UWP.Views
             {
                 ViewModel.SetSuggestionList(sender.Text,true);
             }
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.ProgrammaticChange && sender.IsSuggestionListOpen)
+            {
+                sender.IsSuggestionListOpen = false;
+            }
         }
 
         private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -178,10 +188,18 @@ namespace Project2FA.UWP.Views
         [DynamicWindowsRuntimeCast(typeof(FrameworkElement))]
         [DynamicWindowsRuntimeCast(typeof(AutoSuggestBox))]
 #endif
-        private async void LV_AccountCollection_KeyUp(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private async void OnKeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
+                if (DataService.Instance.ACVCollection.Count == 1)
+                {
+                    if (LV_AccountCollection.FocusState == FocusState.Unfocused)
+                    {
+                        LV_AccountCollection.Focus(FocusState.Programmatic);
+                    }
+                    ViewModel.SelectedIndex = 0;
+                }
                 if (LV_AccountCollection.SelectedItem is TwoFACodeModel model)
                 {
                     if (await Copy2FACodeToClipboard(model))
@@ -240,6 +258,7 @@ namespace Project2FA.UWP.Views
                             break;
                     }
                 }
+                // Focus on search box when press 's'
                 if (e.Key.ToString().ToLower() == "s")
                 {
                     var suggestbox = App.ShellPageInstance.ShellViewInternal.VisualChildren().Where(x => x is AutoSuggestBox);
@@ -247,6 +266,12 @@ namespace Project2FA.UWP.Views
                     {
                         (suggestbox.First() as AutoSuggestBox).Focus(Windows.UI.Xaml.FocusState.Programmatic);
                     }
+                }
+                // Clear search filter when press 'x' and focus on listview if number is valid
+                if (e.Key.ToString().ToLower() == "x")
+                {
+                    ViewModel.SearchedAccountLabel = string.Empty;
+                    ViewModel.TwoFADataService.ACVCollection.Filter = null;
                 }
             }
             else
@@ -257,6 +282,11 @@ namespace Project2FA.UWP.Views
                     {
                         if (result != 0 && result <= ViewModel.TwoFADataService.Collection.Count)
                         {
+                            if (LV_AccountCollection.FocusState == FocusState.Unfocused)
+                            {
+                                LV_AccountCollection.Focus(FocusState.Programmatic);
+                            }
+
                             ViewModel.SelectedIndex = result - 1;
                         }
                         _tempNumber = string.Empty;
